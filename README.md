@@ -4,3 +4,5 @@
 - 前端：Vue 3 + Element Plus
 - 后端：Spring Boot + MyBatis Plus
 - 数据库：MySQL
+### 项目功能思维导图
+![Pamper社区平台功能思维导图](source/designer.png)
