@@ -38,8 +38,6 @@ public class AccountServiceImpl implements AccountService {
             }
         }
     }
-
-
     @Override
     public Object Login(Account user) {
         // TODO: Implement login logic here

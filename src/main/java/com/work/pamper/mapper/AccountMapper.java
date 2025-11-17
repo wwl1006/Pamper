@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AccountMapper {
-    String test();
-
     Account getUserByUsername(String username);
 
     int saveUser(Account user);

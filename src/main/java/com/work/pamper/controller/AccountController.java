@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/account")
 @ResponseBody
 public class AccountController {
+    // 2025-11-17 今天完成的登录注册，有点过于顺利了，希望后续不会出什么问题 :)
     @Autowired
     AccountService accountService;
     @Autowired

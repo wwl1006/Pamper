@@ -2,16 +2,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.work.pamper.mapper.AccountMapper">
     <insert id="saveUser">
         INSERT INTO account (id,username,password,avatar,user_type,email,description
         ) VALUES (#{id},#{username},#{password},#{avatar},#{user_type},#{email},#{description})
     </insert>
-
-    <select id="test" resultType="java.lang.String">
-        select * from account;
-    </select>
     <select id="getUserByUsername" resultType="com.work.pamper.entity.Account">
         SELECT * FROM account WHERE username = #{username}
     </select>
