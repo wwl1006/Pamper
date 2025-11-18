@@ -11,4 +11,6 @@ public class Account {
     private Long user_type;
     private String email;
     private String description;
+    // 创建时间
+    private String create_time;
 }

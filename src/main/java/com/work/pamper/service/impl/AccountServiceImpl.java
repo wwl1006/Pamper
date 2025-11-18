@@ -5,8 +5,11 @@ import com.work.pamper.mapper.AccountMapper;
 import com.work.pamper.service.AccountService;
 import com.work.pamper.utils.JwtUtils;
 import com.work.pamper.utils.ResultUtil;
+import com.work.pamper.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Time;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -23,6 +26,8 @@ public class AccountServiceImpl implements AccountService {
             // 如果用户名已存在，则返回错误信息
             return ResultUtil.error("用户名已存在");
         } else {
+            String now = TimeUtils.getCurrentTimeString();
+            user.setCreate_time(now);
             // 如果用户名不存在，尝试保存用户信息
             try {
                 int result = accountMapper.saveUser(user);
