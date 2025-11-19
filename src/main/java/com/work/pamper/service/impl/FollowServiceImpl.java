@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class FollowServiceImpl implements FollowService {
     @Autowired
     FollowMapper followMapper;
+    private FollowService followService;
 
     @Override
     public Object follow(Follow follow) {

@@ -5,11 +5,12 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-// 指定该注解可以用在方法上
-@Target(ElementType.METHOD)
-// 指定注解的保留策略
+// 支持加在类和方法上（类上用于模块日志，方法上可做扩展）
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AutoControlLog {
-    String value() default "Default Value";
-    int number() default 0;
+    // 方法级别描述（可选）
+    String value() default "";
+    // 模块名（用于类级别）
+    String model() default "";
 }
