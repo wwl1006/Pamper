@@ -1,5 +1,6 @@
 package com.work.pamper.controller;
 
+import com.work.pamper.annotation.AutoControlLog;
 import com.work.pamper.entity.Account;
 import com.work.pamper.mapper.AccountMapper;
 import com.work.pamper.service.AccountService;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 //设置请求路径的前缀为 /account
 @RestController
 @CrossOrigin
-@RequestMapping("/account")
 @ResponseBody
+@RequestMapping("/account")
+
+@AutoControlLog(model = "用户模块")
+
 public class AccountController {
     // 2025-11-17 今天完成的登录注册，有点过于顺利了，希望后续不会出什么问题 :)
     @Autowired
@@ -22,12 +26,13 @@ public class AccountController {
     @Autowired
     AccountMapper accountMapper;
 
-    @RequestMapping("/login")
+    @RequestMapping(path = "/login", name = "用户登录接口")
     public Object login(@RequestBody Account user) {
         return accountService.Login(user);
     }
-    @RequestMapping("/register")
+    @RequestMapping(path = "/register", name = "用户注册接口")
     public Object register(@RequestBody Account user) {
         return accountService.Register(user);
     }
+
 }

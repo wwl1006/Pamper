@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
     @Autowired
     FollowService followService;
-    @RequestMapping("/follow")
+    @RequestMapping(path = "/follow", name = "用户关注接口")
     public Object follow(@RequestBody Follow follow) {
         return followService.follow(follow);
     }
