@@ -7,11 +7,16 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      component: ()=> import('../views/IndexView.vue'),
-      children:[
+      component: () => import('../views/UserView.vue'),
+      children: [
 
       ]
     },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/AdminManageView.vue')
+    }
   ]
 })
 

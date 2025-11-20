@@ -1,33 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { User } from '@element-plus/icons-vue'
+import { getCurrentTime, getGreet } from '../assets/Js/Date';
 
 const time = ref("");
 const user = ref("admin");
 const greet = ref("");
-const hour = new Date().getHours();
-
-if (hour >= 5 && hour < 9) {
-  greet.value = '早上好';
-} else if (hour >= 9 && hour < 11) {
-  greet.value = '上午好';
-} else if (hour >= 11 && hour < 13) {
-  greet.value = '中午好';
-} else if (hour >= 13 && hour < 18) {
-  greet.value = '下午好';
-} else if (hour >= 18 && hour <= 22) {
-  greet.value = '晚上好';
-} else {
-  greet.value = '夜深了';
-}
-
-const UpdateTime = () => {
-  time.value = new Date().toLocaleString();
-}
-
 onMounted(() => {
-  UpdateTime();
-  setInterval(UpdateTime, 1000);
+  time.value = getCurrentTime();
+  greet.value = getGreet();
+  setInterval(() => {
+    time.value = getCurrentTime()
+  }, 1000);
 });
 </script>
 
@@ -48,6 +32,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@import "../assets/css/header.css";
+
 .header {
   height: 70px;
   background: linear-gradient(90deg, #ffecd2, #fcb69f);
@@ -61,67 +47,5 @@ onMounted(() => {
   /* 阴影 */
   border-radius: 0 0 12px 12px;
   font-family: "Segoe UI", "PingFang SC", "Helvetica Neue", sans-serif;
-}
-
-.left {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #4b2e83;
-  letter-spacing: 1px;
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 14px;
-  color: #4b2e83;
-}
-
-.time {
-  background: rgba(255, 255, 255, 0.3);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.greet {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.3);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.logout {
-  padding: 6px 14px;
-  background: #4b2e83;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-
-.logout:hover {
-  background: #6f4bb0;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 </style>

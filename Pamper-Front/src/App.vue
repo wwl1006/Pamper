@@ -6,23 +6,7 @@ import Slidebar from './components/Slidebar.vue';
 </script>
 
 <template>
-  <div class="layout">
-    <!--头部-->
-    <Header />
-    <div class="main">
-      <!--侧边栏-->
-      <Slidebar />
-      <!--内容区-->
-      <div class="content">
-        <router-view></router-view>
-      </div>
-    </div>
-    <div>
-      <!--底部-->
-      <Footer />
-    </div>
-  </div>
-
+  <router-view></router-view>
 </template>
 
 <style>
