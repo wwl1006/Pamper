@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+import request from '../utils/request.js';
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router'
@@ -8,7 +8,8 @@ const router = useRouter()
 
 const form = reactive({
   username: "",
-  password: ""
+  password: "",
+  user_type: 1 // 普通用户:1, 商户用户:2, 管理员:0 默认普通用户
 })
 const login = async () => {
   console.log('登录信息', form.username, ':', form.password);
@@ -16,19 +17,21 @@ const login = async () => {
     ElMessage.error("用户名或密码不能为空！")
     return
   }
-  await axios.post('http://localhost:8080/login', {
+
+  await request.post('/account/login', {
     username: form.username,
-    password: form.password
+    password: form.password,
+    user_type: form.user_type
   }).then(res => {
     if (res.code === 200) {
-      console.log("登录成功", res.data);
+      console.log("登录成功", res.data.data);
+      ElMessage.success('登录成功，欢迎回来！')
       router.push('/')
     } else {
       ElMessage.error(res.msg)
     }
   }).catch(err => {
     console.log("请求失败", err);
-    ElMessage.error("服务器错误！")
   })
 }
 const register = () => {
@@ -50,6 +53,13 @@ const register = () => {
         </el-form-item>
         <el-form-item>
           <el-input class="login-input" type="password" v-model="form.password" placeholder="密码" prefix-icon="Lock" />
+        </el-form-item>
+        <el-form-item>
+          <el-radio-group v-model="form.user_type">
+            <el-radio :label="1">普通用户</el-radio>
+            <el-radio :label="2">商户用户</el-radio>
+            <el-radio :label="0">管理员</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="login-btn" @click="login">登录</el-button>

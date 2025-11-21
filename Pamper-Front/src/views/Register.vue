@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios';
 import { ElMessage } from 'element-plus';
 // import { ca } from 'element-plus/es/locales.mjs';
 import { reactive } from 'vue';
@@ -20,7 +19,7 @@ const doRegister = async () => {
     ElMessage.error("两次密码不一致，请重试！")
     return
   }
-  await axios.post('http://localhost:8080/register', {
+  await registerUser({
     username: form.username,
     password: form.password,
     repassword: form.repassword
@@ -28,7 +27,9 @@ const doRegister = async () => {
     if (res.code === 200) {
       ElMessage.success('注册成功，前往登录中...')
       setTimeout(login, 1000)
-    } else (ElMessage.error(res.msg))
+    } else {
+      ElMessage.error(res.msg)
+    }
   }).catch(err => {
     console.log("请求失败", err);
     ElMessage.error("服务器错误！")

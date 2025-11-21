@@ -11,33 +11,33 @@ public class ResultUtil {
         return new Result<>(200, "成功", data);
     }
 
-    public static <T> Result<T> success(String message, T data) {
-        return new Result<>(200, message, data);
+    public static <T> Result<T> success(String msg, T data) {
+        return new Result<>(200, msg, data);
     }
 
-    public static <T> Result<T> error(Integer code, String message) {
-        return new Result<>(code, message, null);
+    public static <T> Result<T> error(Integer code, String msg) {
+        return new Result<>(code, msg, null);
     }
 
-    public static <T> Result<T> error(String message) {
-        return new Result<>(500, message, null);
+    public static <T> Result<T> error(String msg) {
+        return new Result<>(500, msg, null);
     }
 
-    public static <T> Result<T> error(Integer code, String message, T data) {
-        return new Result<>(code, message, data);
+    public static <T> Result<T> error(Integer code, String msg, T data) {
+        return new Result<>(code, msg, data);
     }
 
     // 静态内部类Result
     public static class Result<T> {
         private Integer code;
-        private String message;
+        private String msg;
         private T data;
 
         public Result() {}
 
-        public Result(Integer code, String message, T data) {
+        public Result(Integer code, String msg, T data) {
             this.code = code;
-            this.message = message;
+            this.msg = msg;
             this.data = data;
         }
 
@@ -50,12 +50,12 @@ public class ResultUtil {
             this.code = code;
         }
 
-        public String getMessage() {
-            return message;
+        public String getMsg() {
+            return msg;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public void setMsg(String msg) {
+            this.msg = msg;
         }
 
         public T getData() {
@@ -70,7 +70,7 @@ public class ResultUtil {
         public String toString() {
             return "Result{" +
                     "code=" + code +
-                    ", message='" + message + '\'' +
+                    ", msg='" + msg + '\'' +
                     ", data=" + data +
                     '}';
         }
