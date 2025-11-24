@@ -8,4 +8,8 @@ public interface AccountService {
         Object Register(Account user);
 
         Object Login(Account user);
+
+        Object getProfileByToken(String token);
+
+        Object updateProfile(String token, Account profile);
 }

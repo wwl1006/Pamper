@@ -10,4 +10,25 @@
     <select id="getUserByUsername" resultType="com.work.pamper.entity.Account">
         SELECT * FROM account WHERE username = #{username}
     </select>
+    <select id="getUserById" resultType="com.work.pamper.entity.Account">
+        SELECT * FROM account WHERE id = #{id}
+    </select>
+    <select id="getIdByUsername" resultType="java.lang.String">
+        SELECT id FROM account WHERE username = #{username}
+    </select>
+    <update id="updateProfile">
+        UPDATE account
+        <set>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

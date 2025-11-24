@@ -12,7 +12,7 @@
 
 <style scoped>
 .footer {
-  height: 80px;
+  height: 50px;
   background-color: #f8f8f8;
   color: #555;
   text-align: center;

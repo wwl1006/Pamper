@@ -8,4 +8,7 @@ public interface AccountMapper {
     Account getUserByUsername(String username);
 
     int saveUser(Account user);
+    Account getUserById(Long id);
+    String getIdByUsername(String username);
+    int updateProfile(Account account);
 }

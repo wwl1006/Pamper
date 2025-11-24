@@ -1,21 +1,22 @@
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
 // 创建一个 axios 实例
 const request = axios.create({
-  baseURL: 'http://localhost:8080', // 你的 API 基础 URL
-  timeout: 5000, // 请求超时时间
-  headers: {
-    'Content-Type': 'application/json', // 默认 Content-Type
-  },
+  baseURL: BASE_URL,
+  timeout: 5000,
 });
 
 // 请求拦截器
 request.interceptors.request.use(
   config => {
+    // 保证 headers 存在
+    config.headers = config.headers || {};
     // 在请求发送之前做一些处理，比如添加 Token
-    const token = localStorage.getItem('token'); // 从本地存储获取Token
+    const token = localStorage.getItem('token');
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.token = token;
     }
     return config;
   },
@@ -28,8 +29,12 @@ request.interceptors.request.use(
 // 响应拦截器
 request.interceptors.response.use(
   response => {
-    // 可以在这里对响应数据做一些处理
-    return response.data;
+    const payload = response.data;
+    if (payload?.code === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+    }
+    return payload;
   },
   error => {
     // 处理响应错误
@@ -44,3 +49,21 @@ request.interceptors.response.use(
 );
 
 export default request;
+
+// example usage:
+  // await request.post('/account/register', {
+  //   username: form.username,
+  //   password: form.password,
+  //   // repassword: form.repassword,
+  //   user_type: form.user_type
+  // }).then(res => {
+  //   if (res.code === 200) {
+  //     ElMessage.success('注册成功，前往登录中...')
+  //     setTimeout(login, 1000)
+  //   } else {
+  //     ElMessage.error(res.msg)
+  //   }
+  // }).catch(err => {
+  //   console.log("请求失败", err);
+  //   ElMessage.error("服务器错误！")
+  // })

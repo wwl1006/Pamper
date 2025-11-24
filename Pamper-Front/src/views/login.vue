@@ -11,31 +11,39 @@ const form = reactive({
   password: "",
   user_type: 1 // 普通用户:1, 商户用户:2, 管理员:0 默认普通用户
 })
+
+const saveSession = (profile) => {
+  if (!profile) return
+  localStorage.setItem('token', profile.token || '')
+  localStorage.setItem('userInfo', JSON.stringify(profile))
+}
+
 const login = async () => {
-  console.log('登录信息', form.username, ':', form.password);
   if (!form.username || !form.password) {
     ElMessage.error("用户名或密码不能为空！")
     return
   }
 
-  await request.post('/account/login', {
-    username: form.username,
-    password: form.password,
-    user_type: form.user_type
-  }).then(res => {
+  try {
+    const res = await request.post('/account/login', {
+      username: form.username,
+      password: form.password,
+      user_type: form.user_type
+    })
     if (res.code === 200) {
-      console.log("登录成功", res.data.data);
-      ElMessage.success('登录成功，欢迎回来！')
-      router.push('/')
+      const profile = res.data
+      saveSession(profile)
+      ElMessage.success(res.msg || '登录成功，欢迎回来！')
+      router.push(profile?.user_type === 0 ? '/admin' : '/')
     } else {
-      ElMessage.error(res.msg)
+      ElMessage.error(res.msg || '登录失败，请稍后再试')
     }
-  }).catch(err => {
+  } catch (err) {
     console.log("请求失败", err);
-  })
+    ElMessage.error("服务器错误！")
+  }
 }
 const register = () => {
-  console.log('跳转注册页面');
   router.push('/register')
 }
 </script>

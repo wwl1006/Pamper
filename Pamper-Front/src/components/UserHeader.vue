@@ -1,22 +1,84 @@
 <script setup>
 import "../assets/Js/Date.js"
-import { onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { getCurrentTime, getGreet } from "../assets/Js/Date.js"
+import DefaultAvatar from '../assets/Img/dog.webp'
+
+const router = useRouter()
 const activeMenu = ref("1")
 const time = ref("")
 const greet = ref("")
-const user = ref('wwl')
 const keyword = ref('')
+const userInfo = ref({})
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+
+let clockTimer = null
+
 const handleSelect = (index) => {
-  console.log('选中的菜单：', index);
   activeMenu.value = index
 }
+
+const loadUserInfo = (payload) => {
+  try {
+    if (payload) {
+      userInfo.value = payload
+      return
+    }
+    const cache = localStorage.getItem('userInfo')
+    userInfo.value = cache ? JSON.parse(cache) : {}
+  } catch (error) {
+    userInfo.value = {}
+  }
+}
+
+const avatarSrc = computed(() => {
+  if (userInfo.value?.id) {
+    return `${API_BASE}/profile/avatar/id/${userInfo.value.id}`
+  }
+  return DefaultAvatar
+})
+
+const logout = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('userInfo')
+  router.push('/login')
+}
+
+const handleCommand = (command) => {
+  if (command === 'profile') {
+    router.push('/profile')
+    return
+  }
+  if (command === 'logout') {
+    logout()
+  }
+}
+
+const handleProfileEvent = (event) => {
+  const detail = event?.detail
+  if (detail) {
+    loadUserInfo(detail)
+  } else {
+    loadUserInfo()
+  }
+}
+
 onMounted(() => {
   time.value = getCurrentTime();
   greet.value = getGreet();
-  setInterval(() => {
+  loadUserInfo()
+  window.addEventListener('pamper-profile-updated', handleProfileEvent)
+  clockTimer = setInterval(() => {
     time.value = getCurrentTime()
   }, 1000)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pamper-profile-updated', handleProfileEvent)
+  if (clockTimer) {
+    clearInterval(clockTimer)
+  }
 })
 </script>
 
@@ -41,13 +103,26 @@ onMounted(() => {
     <div class="right">
       <el-input v-model="keyword" placeholder="搜索帖子 / 宠物 / 用户" class="search" clearable prefix-icon="Search" />
       <span class="time">{{ time }}</span>
-      <span class="greet">
-        <el-icon>
-          <User />
-        </el-icon>
-        {{ greet }}, {{ user }}！
-      </span>
-      <button class="logout">退出</button>
+      <el-dropdown class="user-dropdown" trigger="hover" @command="handleCommand">
+        <div class="user-info">
+          <img class="avatar" :src="avatarSrc" alt="用户头像">
+          <span class="greet">
+            <el-icon>
+              <User />
+            </el-icon>
+            {{ greet }}, {{ userInfo.username || '宠友' }}！
+          </span>
+          <el-icon class="arrow">
+            <ArrowDown />
+          </el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="profile">个人主页</el-dropdown-item>
+            <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 
@@ -101,16 +176,32 @@ onMounted(() => {
 
 /* 右侧内容 */
 .right {
+  display: flex;
+  align-items: center;
   gap: 15px;
   margin-left: 40px;
-  /* ⭐ 与菜单保持适当间距 */
 }
 
-/* 退出按钮 */
-.logout {
-  padding: 6px 12px;
-  background: #4b2e83;
-  color: white;
-  border-radius: 6px;
+.user-dropdown {
+  cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f5f5f5;
+}
+
+.arrow {
+  font-size: 12px;
+  color: #666;
 }
 </style>
