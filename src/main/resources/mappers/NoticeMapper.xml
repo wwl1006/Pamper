@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.NoticeMapper">
+
+    <!-- 发送通知 -->
+    <insert id="sendNotice">
+        insert into notice (notice_type, sender, accepter, message, create_time)
+        values (#{notice_type}, #{sender}, #{accepter}, #{message}, #{create_time})
+    </insert>
+
+    <!-- 获取用户收到的通知列表 -->
+    <select id="getNoticesByAccepter" resultType="com.work.pamper.entity.Notice">
+        select * from notice
+        where accepter = #{accepter}
+        order by create_time desc
+    </select>
+
+    <!-- 获取所有公告 -->
+    <select id="getAllAnnouncements" resultType="com.work.pamper.entity.Notice">
+        select * from notice
+        where notice_type = 1
+        order by create_time desc
+    </select>
+
+    <!-- 根据ID获取通知 -->
+    <select id="getNoticeById" resultType="com.work.pamper.entity.Notice">
+        select * from notice where id = #{id}
+    </select>
+
+    <!-- 获取用户发送的通知列表 -->
+    <select id="getNoticesBySender" resultType="com.work.pamper.entity.Notice">
+        select * from notice
+        where sender = #{sender}
+        order by create_time desc
+    </select>
+
+</mapper>

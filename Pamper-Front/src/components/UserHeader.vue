@@ -17,6 +17,21 @@ let clockTimer = null
 
 const handleSelect = (index) => {
   activeMenu.value = index
+  if (index === '1') {
+    router.push('/')
+  } else if (index === '2') {
+    // 社区页面
+    console.log('跳转到社区页面')
+  } else if (index === '3') {
+    // 领养中心页面
+    console.log('跳转到领养中心页面')
+  } else if (index === '4') {
+    // 商城页面
+    console.log('跳转到商城页面')
+  } else if (index === '5') {
+    // 服务页面
+    console.log('跳转到服务页面')
+  }
 }
 
 const loadUserInfo = (payload) => {
@@ -48,6 +63,10 @@ const logout = () => {
 const handleCommand = (command) => {
   if (command === 'profile') {
     router.push('/profile')
+    return
+  }
+  if (command === 'notice') {
+    router.push('/notice')
     return
   }
   if (command === 'logout') {
@@ -119,6 +138,7 @@ onBeforeUnmount(() => {
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="profile">个人主页</el-dropdown-item>
+            <el-dropdown-item command="notice">通知中心</el-dropdown-item>
             <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>

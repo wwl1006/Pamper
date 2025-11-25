@@ -6,6 +6,6 @@ mybatis:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pamper?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://47.97.44.200:3306/pamper?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: Zdm@123

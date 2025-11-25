@@ -11,4 +11,7 @@ public class Notice {
     private String message;
     // 创建时间
     private String create_time;
+
+    // 新增：用于接收前端传递的用户名（不存数据库）
+    private String accepterUsername;
 }

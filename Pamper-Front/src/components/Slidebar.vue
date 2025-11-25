@@ -1,10 +1,15 @@
 <script setup>
-
+import { Bell, ChatDotRound, Sunny, Service } from '@element-plus/icons-vue'
 </script>
 
 <template>
   <aside class="sidebar">
     <ul>
+      <li>
+        <router-link to="/admin/notice">
+          <el-icon><Bell /></el-icon> 通知管理
+        </router-link>
+      </li>
       <li><router-link to="/"><el-icon>
             <ChatDotRound />
           </el-icon> 宠物社区</router-link></li>

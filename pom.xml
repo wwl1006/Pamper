@@ -91,7 +91,9 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.work.pamper.PamperApplication</mainClass>
-                    <skip>true</skip>
+                    <!-- removed <skip>true</skip> so the repackage goal will run and produce an executable (fat) jar -->
+<!--                    <layered>false</layered>-->
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>
