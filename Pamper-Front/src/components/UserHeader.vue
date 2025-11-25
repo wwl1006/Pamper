@@ -1,7 +1,7 @@
 <script setup>
-import "../assets/Js/Date.js"
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { User, ArrowDown } from '@element-plus/icons-vue'
 import { getCurrentTime, getGreet } from "../assets/Js/Date.js"
 import DefaultAvatar from '../assets/Img/dog.webp'
 
@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f5f5f5;
+  border: 2px solid #f0f0f0;
 }
 
 .arrow {

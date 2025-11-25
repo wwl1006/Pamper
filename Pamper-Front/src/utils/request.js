@@ -33,6 +33,8 @@ request.interceptors.response.use(
     if (payload?.code === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('userInfo');
+      // 跳转到登录页
+      window.location.href = '/login';
     }
     return payload;
   },

@@ -5,8 +5,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'index',
-      component: () => import('../views/UserView.vue'),
+      name: 'home',
+      component: () => import('../views/HomePage.vue'),
       meta: { requiresAuth: true }
     },
     {
@@ -30,6 +30,12 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/Register.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('../views/UserView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })

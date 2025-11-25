@@ -47,7 +47,7 @@ const doRegister = async () => {
   <div class="login-page">
     <div class="login-card">
       <img class="login-logo" src="../assets/Img/dog.webp" alt="logo">
-      <h2>宠伴 - 登录</h2>
+      <h2>宠伴 - 注册</h2>
       <el-form :model="form" ref="loginForm" class="login-form">
         <el-form-item prop="username">
           <el-input class="login-input" v-model="form.username" placeholder="用户名" prefix-icon="User"></el-input>

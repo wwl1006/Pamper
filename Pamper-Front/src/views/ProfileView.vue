@@ -229,16 +229,16 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 24px;
-  padding: 32px 48px;
+  padding: 32px;
   background: #f5f6fa;
 }
 
 .profile-summary,
 .profile-form {
   background: #fff;
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .profile-summary {
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #f5f6fa;
+  border: 2px solid #f0f0f0;
 }
 
 .avatar-upload {
