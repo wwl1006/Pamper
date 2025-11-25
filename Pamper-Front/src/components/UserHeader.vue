@@ -15,21 +15,36 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 let clockTimer = null
 
+// 根据当前路由更新菜单高亮
+const updateActiveMenu = () => {
+  const path = router.currentRoute.value.path
+  if (path === '/') {
+    activeMenu.value = '1'
+  } else if (path.startsWith('/community') || path.startsWith('/post')) {
+    activeMenu.value = '2'
+  } else if (path.startsWith('/adoption')) {
+    activeMenu.value = '3'
+  } else if (path.startsWith('/shop')) {
+    activeMenu.value = '4'
+  } else if (path.startsWith('/service')) {
+    activeMenu.value = '5'
+  }
+}
+
 const handleSelect = (index) => {
   activeMenu.value = index
   if (index === '1') {
     router.push('/')
   } else if (index === '2') {
-    // 社区页面
-    console.log('跳转到社区页面')
+    router.push('/community')
   } else if (index === '3') {
-    // 领养中心页面
+    // 领养中心页面 - 待实现
     console.log('跳转到领养中心页面')
   } else if (index === '4') {
-    // 商城页面
+    // 商城页面 - 待实现
     console.log('跳转到商城页面')
   } else if (index === '5') {
-    // 服务页面
+    // 服务页面 - 待实现
     console.log('跳转到服务页面')
   }
 }
@@ -87,10 +102,16 @@ onMounted(() => {
   time.value = getCurrentTime();
   greet.value = getGreet();
   loadUserInfo()
+  updateActiveMenu() // 初始化菜单高亮
   window.addEventListener('pamper-profile-updated', handleProfileEvent)
   clockTimer = setInterval(() => {
     time.value = getCurrentTime()
   }, 1000)
+
+  // 监听路由变化更新菜单高亮
+  router.afterEach(() => {
+    updateActiveMenu()
+  })
 })
 
 onBeforeUnmount(() => {

@@ -50,6 +50,24 @@ const router = createRouter({
       name: 'notice',
       component: () => import('../views/NoticeView.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/community',
+      name: 'community',
+      component: () => import('../views/PostSquareView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/post/create',
+      name: 'post-create',
+      component: () => import('../views/PostCreateView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/post/:id',
+      name: 'post-detail',
+      component: () => import('../views/PostDetailView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })

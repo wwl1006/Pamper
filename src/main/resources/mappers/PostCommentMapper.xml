@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.PostCommentMapper">
+
+    <insert id="addComment">
+        INSERT INTO post_comment (post_id, user_id, parent_id, content, create_time)
+        VALUES (#{post_id}, #{user_id}, #{parent_id}, #{content}, #{create_time})
+    </insert>
+
+    <select id="getCommentsByPostId" resultType="com.work.pamper.entity.PostComment">
+        SELECT c.*, a.username, a.avatar
+        FROM post_comment c
+        LEFT JOIN account a ON c.user_id = a.id
+        WHERE c.post_id = #{postId}
+        ORDER BY c.create_time DESC
+    </select>
+
+    <select id="countCommentsByPostId" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM post_comment WHERE post_id = #{postId}
+    </select>
+
+    <delete id="deleteComment">
+        DELETE FROM post_comment WHERE id = #{id}
+    </delete>
+</mapper>
