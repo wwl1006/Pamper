@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.NewsMapper">
+
+    <insert id="createNews" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO news (title, summary, content, cover_image, category, tags, source,
+                         author, status, is_top, view_count, like_count, create_by,
+                         create_time, update_time, publish_time)
+        VALUES (#{title}, #{summary}, #{content}, #{cover_image}, #{category}, #{tags},
+                #{source}, #{author}, #{status}, #{is_top}, #{view_count}, #{like_count},
+                #{create_by}, #{create_time}, #{update_time}, #{publish_time})
+    </insert>
+
+    <select id="getNewsById" resultType="com.work.pamper.entity.News">
+        SELECT n.*,
+               a.username as creator_name
+        FROM news n
+        LEFT JOIN account a ON n.create_by = a.id
+        WHERE n.id = #{id}
+    </select>
+
+    <select id="getNewsList" resultType="com.work.pamper.entity.News">
+        SELECT n.*,
+               a.username as creator_name
+        FROM news n
+        LEFT JOIN account a ON n.create_by = a.id
+        WHERE 1=1
+        <if test="category != null and category != ''">
+            AND n.category = #{category}
+        </if>
+        <if test="status != null">
+            AND n.status = #{status}
+        </if>
+        ORDER BY n.is_top DESC, n.publish_time DESC, n.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getNewsCount" resultType="int">
+        SELECT COUNT(*)
+        FROM news
+        WHERE 1=1
+        <if test="category != null and category != ''">
+            AND category = #{category}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <select id="getTopNews" resultType="com.work.pamper.entity.News">
+        SELECT n.*,
+               a.username as creator_name
+        FROM news n
+        LEFT JOIN account a ON n.create_by = a.id
+        WHERE n.status = 1 AND n.is_top = 1
+        ORDER BY n.publish_time DESC
+        LIMIT #{limit}
+    </select>
+
+    <update id="updateNews">
+        UPDATE news
+        SET title = #{title},
+            summary = #{summary},
+            content = #{content},
+            cover_image = #{cover_image},
+            category = #{category},
+            tags = #{tags},
+            source = #{source},
+            author = #{author},
+            update_time = #{update_time}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteNews">
+        DELETE FROM news WHERE id = #{id}
+    </delete>
+
+    <update id="updateNewsStatus">
+        UPDATE news
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateNewsTop">
+        UPDATE news
+        SET is_top = #{isTop}
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseViewCount">
+        UPDATE news
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseLikeCount">
+        UPDATE news
+        SET like_count = like_count + 1
+        WHERE id = #{id}
+    </update>
+</mapper>

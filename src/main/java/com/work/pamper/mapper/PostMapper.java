@@ -2,9 +2,11 @@ package com.work.pamper.mapper;
 
 import com.work.pamper.entity.Post;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface PostMapper {
@@ -46,4 +48,19 @@ public interface PostMapper {
 
     // 删除帖子
     int deletePost(@Param("id") Long id);
+
+    // 管理员功能
+    @MapKey("id")
+    List<Map<String, Object>> getPostsByStatus(@Param("status") int status,
+                                                @Param("offset") int offset,
+                                                @Param("limit") int limit);
+    @MapKey("id")
+    List<Map<String, Object>> getAllPostsForAdmin(@Param("offset") int offset,
+                                                   @Param("limit") int limit);
+    int countPostsByStatus(@Param("status") int status);
+    int countAllPosts();
+    @MapKey("category")
+    List<Map<String, Object>> getPostCountByCategory();
+    int getTotalLikeCount();
+    int getTotalCommentCount();
 }

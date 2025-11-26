@@ -164,8 +164,9 @@ const getImageUrls = (imagesStr) => {
 
 const truncateText = (text, maxLength) => {
   if (!text) return ''
+  // CSS已经处理多行省略,这里只做基础截断
   if (text.length <= maxLength) return text
-  return text.substring(0, maxLength) + '...'
+  return text.substring(0, maxLength) + '…'
 }
 
 onMounted(() => {
@@ -268,6 +269,12 @@ onMounted(() => {
   font-size: 14px;
   line-height: 1.6;
   color: #666;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
 .post-images {

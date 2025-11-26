@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-notice-container">
+  <div class="admin-notice">
     <h2 class="page-title">通知管理</h2>
 
     <!-- 功能卡片 -->
@@ -58,7 +58,7 @@
             </div>
             <div class="announcement-content">{{ notice.message }}</div>
             <div class="announcement-footer">
-              <span class="sender-info">发送者ID: {{ notice.sender }}</span>
+              <span class="sender-info">发送者ID: {{ notice.sender_id }}</span>
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.admin-notice-container {
+.admin-notice {
   padding: 20px;
 }
 

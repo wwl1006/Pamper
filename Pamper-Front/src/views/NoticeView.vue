@@ -54,7 +54,7 @@
               </div>
               <div class="notice-message">{{ notice.message }}</div>
               <div class="notice-footer">
-                <span class="notice-sender">来自用户ID: {{ notice.sender }}</span>
+                <span class="notice-sender">来自用户ID: {{ notice.sender_id }}</span>
               </div>
             </div>
           </div>
@@ -98,8 +98,8 @@
                 <span class="notice-time">{{ notice.create_time }}</span>
               </div>
               <div class="notice-message">{{ notice.message }}</div>
-              <div class="notice-footer" v-if="notice.accepter">
-                <span class="notice-receiver">发送给用户ID: {{ notice.accepter }}</span>
+              <div class="notice-footer" v-if="notice.receiver_id">
+                <span class="notice-receiver">发送给用户ID: {{ notice.receiver_id }}</span>
               </div>
             </div>
           </div>
@@ -108,9 +108,9 @@
         <div v-if="activeTab === 'send'" class="send-notice-wrapper">
           <h3>发送私信</h3>
           <el-form :model="sendForm" :rules="sendRules" ref="sendFormRef" label-width="120px" class="send-form">
-            <el-form-item label="接收者用户名" prop="accepterUsername">
+            <el-form-item label="接收者用户名" prop="receiverUsername">
               <el-input
-                v-model="sendForm.accepterUsername"
+                v-model="sendForm.receiverUsername"
                 placeholder="请输入接收者的用户名"
                 clearable
               />
@@ -156,12 +156,12 @@ const sendFormRef = ref()
 
 const sendForm = reactive({
   notice_type: 0,
-  accepterUsername: '',
+  receiverUsername: '',
   message: ''
 })
 
 const sendRules = {
-  accepterUsername: [
+  receiverUsername: [
     { required: true, message: '请输入接收者用户名', trigger: 'blur' }
   ],
   message: [
@@ -240,7 +240,7 @@ const submitSendForm = async () => {
 
     const payload = {
       notice_type: 0,
-      accepterUsername: sendForm.accepterUsername,
+      receiverUsername: sendForm.receiverUsername,
       message: sendForm.message
     }
 
@@ -263,7 +263,7 @@ const submitSendForm = async () => {
 }
 
 const resetSendForm = () => {
-  sendForm.accepterUsername = ''
+  sendForm.receiverUsername = ''
   sendForm.message = ''
   sendFormRef.value?.clearValidate()
 }

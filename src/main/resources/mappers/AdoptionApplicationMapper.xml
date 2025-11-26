@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.AdoptionApplicationMapper">
+
+    <insert id="createApplication" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO adoption_application (adoption_id, applicant_id, message, contact, status, create_time, update_time)
+        VALUES (#{adoption_id}, #{applicant_id}, #{message}, #{contact}, #{status}, #{create_time}, #{update_time})
+    </insert>
+
+    <select id="getApplicationById" resultType="com.work.pamper.entity.AdoptionApplication">
+        SELECT aa.*, acc.username as applicant_username, acc.avatar as applicant_avatar,
+               a.pet_name, a.pet_type
+        FROM adoption_application aa
+        LEFT JOIN account acc ON aa.applicant_id = acc.id
+        LEFT JOIN adoption a ON aa.adoption_id = a.id
+        WHERE aa.id = #{id}
+    </select>
+
+    <select id="getApplicationsByAdoptionId" resultType="com.work.pamper.entity.AdoptionApplication">
+        SELECT aa.*, acc.username as applicant_username, acc.avatar as applicant_avatar
+        FROM adoption_application aa
+        LEFT JOIN account acc ON aa.applicant_id = acc.id
+        WHERE aa.adoption_id = #{adoptionId}
+        ORDER BY aa.create_time DESC
+    </select>
+
+    <select id="getApplicationsByApplicantId" resultType="com.work.pamper.entity.AdoptionApplication">
+        SELECT aa.*, a.pet_name, a.pet_type
+        FROM adoption_application aa
+        LEFT JOIN adoption a ON aa.adoption_id = a.id
+        WHERE aa.applicant_id = #{applicantId}
+        ORDER BY aa.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countApplicationsByAdoptionId" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM adoption_application WHERE adoption_id = #{adoptionId}
+    </select>
+
+    <select id="checkApplication" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM adoption_application
+        WHERE adoption_id = #{adoptionId} AND applicant_id = #{applicantId}
+    </select>
+
+    <update id="updateApplicationStatus">
+        UPDATE adoption_application SET status = #{status}, update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <delete id="deleteApplication">
+        DELETE FROM adoption_application WHERE id = #{id}
+    </delete>
+</mapper>

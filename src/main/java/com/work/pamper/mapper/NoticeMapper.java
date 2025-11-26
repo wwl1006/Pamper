@@ -12,7 +12,7 @@ public interface NoticeMapper {
     int sendNotice(Notice notice);
 
     // 获取用户收到的通知列表
-    List<Notice> getNoticesByAccepter(@Param("accepter") Long accepter);
+    List<Notice> getNoticesByAccepter(@Param("receiver_id") Long receiver_id);
 
     // 获取所有公告
     List<Notice> getAllAnnouncements();
@@ -21,5 +21,5 @@ public interface NoticeMapper {
     Notice getNoticeById(@Param("id") Long id);
 
     // 获取用户发送的通知列表
-    List<Notice> getNoticesBySender(@Param("sender") Long sender);
+    List<Notice> getNoticesBySender(@Param("sender_id") Long sender_id);
 }

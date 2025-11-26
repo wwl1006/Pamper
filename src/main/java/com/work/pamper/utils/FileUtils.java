@@ -262,6 +262,183 @@ public class FileUtils {
         return showFile("posts" + File.separator + "videos", filename);
     }
 
+    // 领养宠物图片上传（支持多图，最多6张）
+    public static Object uploadAdoptionImages(MultipartFile[] files, String token) {
+        if (token == null || token.isEmpty()) {
+            return ResultUtil.error("上传失败，缺少token");
+        }
+
+        String userId = JwtUtils.getSubject(token);
+        if (files == null || files.length == 0) {
+            return ResultUtil.error("上传失败，文件为空");
+        }
+
+        // 限制最多6张图片
+        if (files.length > 6) {
+            return ResultUtil.error("最多只能上传6张图片");
+        }
+
+        // 构建目录
+        String currentDirectory = System.getProperty("user.dir");
+        String adoptionPath = currentDirectory + File.separator + "adoption" + File.separator + "images";
+
+        File directory = new File(adoptionPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        java.util.List<String> uploadedUrls = new java.util.ArrayList<>();
+        long timestamp = System.currentTimeMillis();
+
+        try {
+            for (int i = 0; i < files.length; i++) {
+                MultipartFile file = files[i];
+
+                // 验证文件类型
+                String contentType = file.getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
+                    return ResultUtil.error("只能上传图片文件");
+                }
+
+                // 验证文件大小（10MB）
+                if (file.getSize() > 10 * 1024 * 1024) {
+                    return ResultUtil.error("图片大小不能超过10MB");
+                }
+
+                // 获取原始扩展名
+                String originalFilename = file.getOriginalFilename();
+                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+                // 文件名：timestamp-index.ext
+                String fileName = timestamp + "-" + i + extension;
+                File dest = new File(adoptionPath, fileName);
+
+                file.transferTo(dest);
+                uploadedUrls.add("adoption/image/" + fileName);
+            }
+
+            return ResultUtil.success("上传成功", uploadedUrls);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResultUtil.error("上传失败，发生异常：" + e.getMessage());
+        }
+    }
+
+    // 获取领养宠物图片
+    public static ResponseEntity<byte[]> showAdoptionImage(String filename) {
+        return showFile("adoption" + File.separator + "images", filename);
+    }
+
+    // 宠物档案头像上传
+    public static Object uploadPetAvatar(MultipartFile file, String token) {
+        if (token == null || token.isEmpty()) {
+            return ResultUtil.error("上传失败，缺少token");
+        }
+
+        String userId = JwtUtils.getSubject(token);
+        if (file.isEmpty()) {
+            return ResultUtil.error("上传失败，文件为空");
+        }
+
+        // 验证文件类型
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            return ResultUtil.error("只能上传图片文件");
+        }
+
+        // 验证文件大小（5MB）
+        if (file.getSize() > 5 * 1024 * 1024) {
+            return ResultUtil.error("图片大小不能超过5MB");
+        }
+
+        // 构建目录
+        String currentDirectory = System.getProperty("user.dir");
+        String petAvatarPath = currentDirectory + File.separator + "pets" + File.separator + "avatars";
+
+        File directory = new File(petAvatarPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try {
+            // 获取原始扩展名
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+            // 文件名：timestamp.ext
+            long timestamp = System.currentTimeMillis();
+            String fileName = timestamp + extension;
+            File dest = new File(petAvatarPath, fileName);
+
+            file.transferTo(dest);
+
+            return ResultUtil.success("上传成功", "pet/avatar/" + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResultUtil.error("上传失败，发生异常：" + e.getMessage());
+        }
+    }
+
+    // 活动封面上传
+    public static Object uploadActivityCover(MultipartFile file, String token) {
+        if (token == null || token.isEmpty()) {
+            return ResultUtil.error("上传失败，缺少token");
+        }
+
+        if (file.isEmpty()) {
+            return ResultUtil.error("上传失败，文件为空");
+        }
+
+        // 验证文件类型
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            return ResultUtil.error("只能上传图片文件");
+        }
+
+        // 验证文件大小（5MB）
+        if (file.getSize() > 5 * 1024 * 1024) {
+            return ResultUtil.error("图片大小不能超过5MB");
+        }
+
+        // 构建目录
+        String currentDirectory = System.getProperty("user.dir");
+        String activityCoverPath = currentDirectory + File.separator + "activities" + File.separator + "covers";
+
+        File directory = new File(activityCoverPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try {
+            // 获取原始扩展名
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename != null && originalFilename.lastIndexOf(".") > 0 ?
+                    originalFilename.substring(originalFilename.lastIndexOf(".")) : ".jpg";
+
+            // 文件名：timestamp.ext
+            long timestamp = System.currentTimeMillis();
+            String fileName = timestamp + extension;
+            File dest = new File(activityCoverPath, fileName);
+
+            file.transferTo(dest);
+
+            return ResultUtil.success("上传成功", "activity/cover/" + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResultUtil.error("上传失败，发生异常：" + e.getMessage());
+        }
+    }
+
+    // 获取宠物头像
+    public static ResponseEntity<byte[]> showPetAvatar(String filename) {
+        return showFile("pets" + File.separator + "avatars", filename);
+    }
+
+    // 获取活动封面
+    public static ResponseEntity<byte[]> showActivityCover(String filename) {
+        return showFile("activities" + File.separator + "covers", filename);
+    }
+
     // 通用文件显示方法
     private static ResponseEntity<byte[]> showFile(String folder, String filename) {
         if (filename == null || filename.isEmpty()) {

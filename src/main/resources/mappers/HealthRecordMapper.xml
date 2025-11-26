@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.HealthRecordMapper">
+
+    <insert id="addHealthRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO health_record (pet_id, record_type, title, content, record_date,
+                                   doctor, hospital, create_time)
+        VALUES (#{pet_id}, #{record_type}, #{title}, #{content}, #{record_date},
+                #{doctor}, #{hospital}, #{create_time})
+    </insert>
+
+    <select id="getHealthRecordById" resultType="com.work.pamper.entity.HealthRecord">
+        SELECT hr.*, pp.pet_name
+        FROM health_record hr
+        LEFT JOIN pet_profile pp ON hr.pet_id = pp.id
+        WHERE hr.id = #{id}
+    </select>
+
+    <select id="getRecordsByPetId" resultType="com.work.pamper.entity.HealthRecord">
+        SELECT * FROM health_record
+        WHERE pet_id = #{petId}
+        ORDER BY record_date DESC, create_time DESC
+    </select>
+
+    <select id="countRecordsByPetId" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM health_record WHERE pet_id = #{petId}
+    </select>
+
+    <update id="updateHealthRecord">
+        UPDATE health_record
+        SET record_type = #{record_type},
+            title = #{title},
+            content = #{content},
+            record_date = #{record_date},
+            doctor = #{doctor},
+            hospital = #{hospital}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteHealthRecord">
+        DELETE FROM health_record WHERE id = #{id}
+    </delete>
+</mapper>

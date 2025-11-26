@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.work.pamper.mapper.FollowMapper">
     <insert id="follow">
-        insert into follow (followers, followed, create_time) values (#{followers}, #{followed}, #{create_time})
+        insert into follow (follower_id, followed_id, create_time) values (#{follower_id}, #{followed_id}, #{create_time})
     </insert>
     <select id="checkFollow" resultType="java.lang.Integer">
-        select count(*) from follow where followers = #{followers} and followed = #{followed}
+        select count(*) from follow where follower_id = #{follower_id} and followed_id = #{followed_id}
     </select>
 </mapper>

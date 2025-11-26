@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.AdoptionMapper">
+
+    <insert id="createAdoption" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO adoption (user_id, pet_name, pet_type, pet_breed, pet_age, pet_gender,
+                             description, images, contact, location, status,
+                             create_time, update_time)
+        VALUES (#{user_id}, #{pet_name}, #{pet_type}, #{pet_breed}, #{pet_age}, #{pet_gender},
+                #{description}, #{images}, #{contact}, #{location}, #{status},
+                #{create_time}, #{update_time})
+    </insert>
+
+    <select id="getAdoptionById" resultType="com.work.pamper.entity.Adoption">
+        SELECT a.*, acc.username, acc.avatar,
+               (SELECT COUNT(*) FROM adoption_application WHERE adoption_id = a.id) as application_count
+        FROM adoption a
+        LEFT JOIN account acc ON a.user_id = acc.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getAdoptionsWithPagination" resultType="com.work.pamper.entity.Adoption">
+        SELECT a.*, acc.username, acc.avatar,
+               (SELECT COUNT(*) FROM adoption_application WHERE adoption_id = a.id) as application_count
+        FROM adoption a
+        LEFT JOIN account acc ON a.user_id = acc.id
+        WHERE 1=1
+        <if test="petType != null and petType != ''">
+            AND a.pet_type = #{petType}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        ORDER BY a.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAdoptions" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM adoption
+        WHERE 1=1
+        <if test="petType != null and petType != ''">
+            AND pet_type = #{petType}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <select id="getAdoptionsByUserId" resultType="com.work.pamper.entity.Adoption">
+        SELECT a.*, acc.username, acc.avatar,
+               (SELECT COUNT(*) FROM adoption_application WHERE adoption_id = a.id) as application_count
+        FROM adoption a
+        LEFT JOIN account acc ON a.user_id = acc.id
+        WHERE a.user_id = #{userId}
+        ORDER BY a.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <update id="updateAdoptionStatus">
+        UPDATE adoption SET status = #{status}, update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <update id="updateAdoption">
+        UPDATE adoption
+        SET pet_name = #{pet_name},
+            pet_type = #{pet_type},
+            pet_breed = #{pet_breed},
+            pet_age = #{pet_age},
+            pet_gender = #{pet_gender},
+            description = #{description},
+            images = #{images},
+            contact = #{contact},
+            location = #{location},
+            update_time = #{update_time}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAdoption">
+        DELETE FROM adoption WHERE id = #{id}
+    </delete>
+
+    <!-- 管理员功能 -->
+    <select id="getAdoptionsByStatus" resultType="map">
+        SELECT a.id, a.user_id, a.pet_name, a.pet_type, a.pet_breed, a.pet_age,
+               a.pet_gender, a.status, a.create_time,
+               acc.username, acc.avatar
+        FROM adoption a
+        LEFT JOIN account acc ON a.user_id = acc.id
+        WHERE a.status = #{status}
+        ORDER BY a.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAdoptionsByStatus" resultType="int">
+        SELECT COUNT(*) FROM adoption WHERE status = #{status}
+    </select>
+
+    <select id="getAdoptionCountByPetType" resultType="map">
+        SELECT pet_type AS name, COUNT(*) AS value
+        FROM adoption
+        WHERE status = 1
+        GROUP BY pet_type
+    </select>
+
+    <select id="getAllAdoptionsForAdmin" resultType="map">
+        SELECT a.id, a.user_id, a.pet_name, a.pet_type, a.pet_breed, a.pet_age,
+               a.pet_gender, a.status, a.create_time,
+               acc.username, acc.avatar
+        FROM adoption a
+        LEFT JOIN account acc ON a.user_id = acc.id
+        ORDER BY a.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAllAdoptions" resultType="int">
+        SELECT COUNT(*) FROM adoption
+    </select>
+</mapper>

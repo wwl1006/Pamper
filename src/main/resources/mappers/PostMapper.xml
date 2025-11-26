@@ -73,4 +73,49 @@
     <delete id="deletePost">
         DELETE FROM post WHERE id = #{id}
     </delete>
+
+    <!-- 管理员功能 -->
+    <select id="getPostsByStatus" resultType="map">
+        SELECT p.id, p.user_id, p.title, p.content, p.category, p.status,
+               p.like_count, p.comment_count, p.view_count, p.create_time,
+               a.username, a.avatar
+        FROM post p
+        LEFT JOIN account a ON p.user_id = a.id
+        WHERE p.status = #{status}
+        ORDER BY p.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countPostsByStatus" resultType="int">
+        SELECT COUNT(*) FROM post WHERE status = #{status}
+    </select>
+
+    <select id="getPostCountByCategory" resultType="map">
+        SELECT category AS name, COUNT(*) AS value
+        FROM post
+        WHERE status = 1
+        GROUP BY category
+    </select>
+
+    <select id="getTotalLikeCount" resultType="int">
+        SELECT COALESCE(SUM(like_count), 0) FROM post
+    </select>
+
+    <select id="getTotalCommentCount" resultType="int">
+        SELECT COALESCE(SUM(comment_count), 0) FROM post
+    </select>
+
+    <select id="getAllPostsForAdmin" resultType="map">
+        SELECT p.id, p.user_id, p.title, p.content, p.category, p.status,
+               p.like_count, p.comment_count, p.view_count, p.create_time,
+               a.username, a.avatar
+        FROM post p
+        LEFT JOIN account a ON p.user_id = a.id
+        ORDER BY p.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAllPosts" resultType="int">
+        SELECT COUNT(*) FROM post
+    </select>
 </mapper>

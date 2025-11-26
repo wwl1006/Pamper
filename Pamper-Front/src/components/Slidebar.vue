@@ -1,5 +1,5 @@
 <script setup>
-import { Bell, ChatDotRound, Sunny, Service } from '@element-plus/icons-vue'
+import { Bell, ChatDotRound, Sunny, Service, Avatar, Calendar, Document } from '@element-plus/icons-vue'
 </script>
 
 <template>
@@ -13,12 +13,21 @@ import { Bell, ChatDotRound, Sunny, Service } from '@element-plus/icons-vue'
       <li><router-link to="/community"><el-icon>
             <ChatDotRound />
           </el-icon> 宠物社区</router-link></li>
-      <li><router-link to="/"><el-icon>
+      <li><router-link to="/adoption"><el-icon>
             <Sunny />
           </el-icon> 领养宠物</router-link></li>
-      <li><router-link to="/"> <el-icon>
+      <li><router-link to="/mypets"><el-icon>
+            <Avatar />
+          </el-icon> 宠物档案</router-link></li>
+      <li><router-link to="/services"> <el-icon>
             <Service />
-          </el-icon> 宠物医疗与服务</router-link></li>
+          </el-icon> 医疗服务</router-link></li>
+      <li><router-link to="/activities"><el-icon>
+            <Calendar />
+          </el-icon> 活动中心</router-link></li>
+      <li><router-link to="/news"><el-icon>
+            <Document />
+          </el-icon> 宠物资讯</router-link></li>
     </ul>
   </aside>
   <!-- <h3>侧边栏</h3> -->

@@ -21,20 +21,20 @@ public class PostController {
 
     // 创建帖子
     @RequestMapping(path = "/create", name = "创建帖子接口", method = RequestMethod.POST)
-    public Object createPost(@RequestHeader("token") String token, @RequestBody Post post) {
+    public Object createPost(@RequestHeader("Authorization") String token, @RequestBody Post post) {
         return postService.createPost(token, post);
     }
 
     // 获取帖子详情
-    @RequestMapping(path = "/{id}", name = "获取帖子详情接口", method = RequestMethod.GET)
-    public Object getPostDetail(@RequestHeader(value = "token", required = false) String token,
+    @RequestMapping(path = "/{id:\\d+}", name = "获取帖子详情接口", method = RequestMethod.GET)
+    public Object getPostDetail(@RequestHeader(value = "Authorization", required = false) String token,
                                @PathVariable Long id) {
         return postService.getPostDetail(token, id);
     }
 
     // 获取帖子列表
     @RequestMapping(path = "/list", name = "获取帖子列表接口", method = RequestMethod.GET)
-    public Object getPostList(@RequestHeader(value = "token", required = false) String token,
+    public Object getPostList(@RequestHeader(value = "Authorization", required = false) String token,
                              @RequestParam(required = false) String category,
                              @RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -43,39 +43,39 @@ public class PostController {
 
     // 获取我的帖子列表
     @RequestMapping(path = "/my", name = "获取我的帖子接口", method = RequestMethod.GET)
-    public Object getMyPosts(@RequestHeader("token") String token,
+    public Object getMyPosts(@RequestHeader("Authorization") String token,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
         return postService.getMyPosts(token, page, pageSize);
     }
 
     // 点赞/取消点赞
-    @RequestMapping(path = "/like/{id}", name = "点赞帖子接口", method = RequestMethod.POST)
-    public Object toggleLike(@RequestHeader("token") String token, @PathVariable Long id) {
+    @RequestMapping(path = "/like/{id:\\d+}", name = "点赞帖子接口", method = RequestMethod.POST)
+    public Object toggleLike(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         return postService.toggleLike(token, id);
     }
 
     // 添加评论
     @RequestMapping(path = "/comment", name = "添加评论接口", method = RequestMethod.POST)
-    public Object addComment(@RequestHeader("token") String token, @RequestBody PostComment comment) {
+    public Object addComment(@RequestHeader("Authorization") String token, @RequestBody PostComment comment) {
         return postService.addComment(token, comment);
     }
 
     // 获取评论列表
-    @RequestMapping(path = "/{id}/comments", name = "获取评论列表接口", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id:\\d+}/comments", name = "获取评论列表接口", method = RequestMethod.GET)
     public Object getComments(@PathVariable Long id) {
         return postService.getComments(id);
     }
 
     // 删除帖子
-    @RequestMapping(path = "/{id}", name = "删除帖子接口", method = RequestMethod.DELETE)
-    public Object deletePost(@RequestHeader("token") String token, @PathVariable Long id) {
+    @RequestMapping(path = "/{id:\\d+}", name = "删除帖子接口", method = RequestMethod.DELETE)
+    public Object deletePost(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         return postService.deletePost(token, id);
     }
 
     // 更新帖子状态（管理员）
-    @RequestMapping(path = "/{id}/status", name = "更新帖子状态接口", method = RequestMethod.PUT)
-    public Object updatePostStatus(@RequestHeader("token") String token,
+    @RequestMapping(path = "/{id}:\\d+/status", name = "更新帖子状态接口", method = RequestMethod.PUT)
+    public Object updatePostStatus(@RequestHeader("Authorization") String token,
                                   @PathVariable Long id,
                                   @RequestParam Integer status) {
         return postService.updatePostStatus(token, id, status);
@@ -83,14 +83,14 @@ public class PostController {
 
     // 上传帖子图片
     @RequestMapping(path = "/upload/images", name = "上传帖子图片接口", method = RequestMethod.POST)
-    public Object uploadImages(@RequestHeader("token") String token,
+    public Object uploadImages(@RequestHeader("Authorization") String token,
                               @RequestParam("files") MultipartFile[] files) {
         return FileUtils.uploadPostImages(files, token);
     }
 
     // 上传帖子视频
     @RequestMapping(path = "/upload/video", name = "上传帖子视频接口", method = RequestMethod.POST)
-    public Object uploadVideo(@RequestHeader("token") String token,
+    public Object uploadVideo(@RequestHeader("Authorization") String token,
                              @RequestParam("file") MultipartFile file) {
         return FileUtils.uploadPostVideo(file, token);
     }

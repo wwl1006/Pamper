@@ -9,7 +9,6 @@ const router = useRouter()
 const activeMenu = ref("1")
 const time = ref("")
 const greet = ref("")
-const keyword = ref('')
 const userInfo = ref({})
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
@@ -22,12 +21,14 @@ const updateActiveMenu = () => {
     activeMenu.value = '1'
   } else if (path.startsWith('/community') || path.startsWith('/post')) {
     activeMenu.value = '2'
-  } else if (path.startsWith('/adoption')) {
+  } else if (path.startsWith('/activities') || path.startsWith('/activity')) {
     activeMenu.value = '3'
-  } else if (path.startsWith('/shop')) {
+  } else if (path.startsWith('/adoption')) {
     activeMenu.value = '4'
-  } else if (path.startsWith('/service')) {
+  } else if (path.startsWith('/mypets') || path.startsWith('/pet')) {
     activeMenu.value = '5'
+  } else if (path.startsWith('/service') || path.startsWith('/appointment')) {
+    activeMenu.value = '6'
   }
 }
 
@@ -38,14 +39,13 @@ const handleSelect = (index) => {
   } else if (index === '2') {
     router.push('/community')
   } else if (index === '3') {
-    // 领养中心页面 - 待实现
-    console.log('跳转到领养中心页面')
+    router.push('/activities')
   } else if (index === '4') {
-    // 商城页面 - 待实现
-    console.log('跳转到商城页面')
+    router.push('/adoption')
   } else if (index === '5') {
-    // 服务页面 - 待实现
-    console.log('跳转到服务页面')
+    router.push('/mypets')
+  } else if (index === '6') {
+    router.push('/services')
   }
 }
 
@@ -82,6 +82,10 @@ const handleCommand = (command) => {
   }
   if (command === 'notice') {
     router.push('/notice')
+    return
+  }
+  if (command === 'myposts') {
+    router.push('/myposts')
     return
   }
   if (command === 'logout') {
@@ -134,14 +138,14 @@ onBeforeUnmount(() => {
     <el-menu :default-active="activeMenu" class="menu" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1">首页</el-menu-item>
       <el-menu-item index="2">社区</el-menu-item>
-      <el-menu-item index="3">领养中心</el-menu-item>
-      <el-menu-item index="4">商城</el-menu-item>
-      <el-menu-item index="5">服务</el-menu-item>
+      <el-menu-item index="3">活动中心</el-menu-item>
+      <el-menu-item index="4">领养中心</el-menu-item>
+      <el-menu-item index="5">我的宠物</el-menu-item>
+      <el-menu-item index="6">医疗服务</el-menu-item>
     </el-menu>
 
     <!-- 右侧 -->
     <div class="right">
-      <el-input v-model="keyword" placeholder="搜索帖子 / 宠物 / 用户" class="search" clearable prefix-icon="Search" />
       <span class="time">{{ time }}</span>
       <el-dropdown class="user-dropdown" trigger="hover" @command="handleCommand">
         <div class="user-info">
@@ -160,6 +164,7 @@ onBeforeUnmount(() => {
           <el-dropdown-menu>
             <el-dropdown-item command="profile">个人主页</el-dropdown-item>
             <el-dropdown-item command="notice">通知中心</el-dropdown-item>
+            <el-dropdown-item command="myposts">我的发布</el-dropdown-item>
             <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -200,7 +205,7 @@ onBeforeUnmount(() => {
 
 /* 标题 */
 .title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #333;
 }

@@ -16,7 +16,7 @@ request.interceptors.request.use(
     // 在请求发送之前做一些处理，比如添加 Token
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.token = token;
+      config.headers.Authorization = token;
     }
     return config;
   },

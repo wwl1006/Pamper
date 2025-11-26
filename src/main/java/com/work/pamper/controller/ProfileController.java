@@ -22,23 +22,23 @@ public class ProfileController {
     AccountService accountService;
 
     @GetMapping("/me")
-    public Object profile(@RequestHeader("token") String token) {
+    public Object profile(@RequestHeader("Authorization") String token) {
         return accountService.getProfileByToken(token);
     }
 
     @PutMapping("/me")
-    public Object updateProfile(@RequestHeader("token") String token,
+    public Object updateProfile(@RequestHeader("Authorization") String token,
                                 @RequestBody Account profile) {
         return accountService.updateProfile(token, profile);
     }
 
     @RequestMapping(path = "/uploadAvatar", name = "用户头像上传接口")
-    public Object uploadAvatar(@RequestHeader("token") String token, @RequestParam("file") MultipartFile file) {
+    public Object uploadAvatar(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file) {
         return FileUtils.uploadAvatar(file, token);
     }
 
     @GetMapping("/avatar")
-    public ResponseEntity<byte[]> getAvatar(@RequestHeader("token") String token) {
+    public ResponseEntity<byte[]> getAvatar(@RequestHeader("Authorization") String token) {
         return FileUtils.showAvatar(token);
     }
 

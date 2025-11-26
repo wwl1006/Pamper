@@ -6,14 +6,14 @@
 
     <!-- 发送通知 -->
     <insert id="sendNotice">
-        insert into notice (notice_type, sender, accepter, message, create_time)
-        values (#{notice_type}, #{sender}, #{accepter}, #{message}, #{create_time})
+        insert into notice (notice_type, sender_id, receiver_id, message, is_read, create_time)
+        values (#{notice_type}, #{sender_id}, #{receiver_id}, #{message}, COALESCE(#{is_read}, 0), #{create_time})
     </insert>
 
     <!-- 获取用户收到的通知列表 -->
     <select id="getNoticesByAccepter" resultType="com.work.pamper.entity.Notice">
         select * from notice
-        where accepter = #{accepter}
+        where (receiver_id = #{receiver_id} AND notice_type = 0) OR notice_type = 1
         order by create_time desc
     </select>
 
@@ -32,7 +32,7 @@
     <!-- 获取用户发送的通知列表 -->
     <select id="getNoticesBySender" resultType="com.work.pamper.entity.Notice">
         select * from notice
-        where sender = #{sender}
+        where sender_id = #{sender_id}
         order by create_time desc
     </select>
 

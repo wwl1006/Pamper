@@ -94,7 +94,7 @@ public class AccountServiceImpl implements AccountService {
             loginResponse.setId(account.getId());
             loginResponse.setUsername(account.getUsername());
             loginResponse.setAvatar(account.getAvatar());
-            loginResponse.setUser_type(account.getUser_type());
+            loginResponse.setUser_type(Long.valueOf(account.getUser_type()));
             loginResponse.setEmail(account.getEmail());
             loginResponse.setDescription(account.getDescription());
             loginResponse.setCreate_time(account.getCreate_time());

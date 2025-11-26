@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.pamper.mapper.PetProfileMapper">
+
+    <insert id="createPetProfile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pet_profile (user_id, pet_name, pet_type, breed, gender, birthday,
+                                 color, weight, description, avatar, create_time, update_time)
+        VALUES (#{user_id}, #{pet_name}, #{pet_type}, #{breed}, #{gender}, #{birthday},
+                #{color}, #{weight}, #{description}, #{avatar}, #{create_time}, #{update_time})
+    </insert>
+
+    <select id="getPetProfileById" resultType="com.work.pamper.entity.PetProfile">
+        SELECT p.*,
+               (SELECT COUNT(*) FROM health_record WHERE pet_id = p.id) as health_record_count
+        FROM pet_profile p
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="getPetsByUserId" resultType="com.work.pamper.entity.PetProfile">
+        SELECT p.*,
+               (SELECT COUNT(*) FROM health_record WHERE pet_id = p.id) as health_record_count
+        FROM pet_profile p
+        WHERE p.user_id = #{userId}
+        ORDER BY p.create_time DESC
+    </select>
+
+    <update id="updatePetProfile">
+        UPDATE pet_profile
+        SET pet_name = #{pet_name},
+            pet_type = #{pet_type},
+            breed = #{breed},
+            gender = #{gender},
+            birthday = #{birthday},
+            color = #{color},
+            weight = #{weight},
+            description = #{description},
+            avatar = #{avatar},
+            update_time = #{update_time}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deletePetProfile">
+        DELETE FROM pet_profile WHERE id = #{id}
+    </delete>
+
+    <!-- 管理员功能 -->
+    <select id="getTotalPetCount" resultType="int">
+        SELECT COUNT(*) FROM pet_profile
+    </select>
+</mapper>

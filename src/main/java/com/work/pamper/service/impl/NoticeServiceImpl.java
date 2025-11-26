@@ -51,7 +51,7 @@ public class NoticeServiceImpl implements NoticeService {
             return false;
         }
         Account account = accountMapper.getUserById(userId);
-        return account != null && Long.valueOf(0).equals(account.getUser_type());
+        return account != null && Integer.valueOf(0).equals(account.getUser_type());
     }
 
     @Override
@@ -70,24 +70,24 @@ public class NoticeServiceImpl implements NoticeService {
         }
 
         // 设置发送者为当前用户
-        notice.setSender(userId);
+        notice.setSender_id(userId);
 
         // 私信处理（notice_type = 0）
         if (notice.getNotice_type() == 0) {
             // 检查是否提供了用户名
-            if (notice.getAccepterUsername() == null || notice.getAccepterUsername().isEmpty()) {
+            if (notice.getReceiverUsername() == null || notice.getReceiverUsername().isEmpty()) {
                 return ResultUtil.error("私信需要指定接收者用户名");
             }
 
             // 根据用户名查询用户ID
-            String accepterIdStr = accountMapper.getIdByUsername(notice.getAccepterUsername());
-            if (accepterIdStr == null) {
+            String receiverIdStr = accountMapper.getIdByUsername(notice.getReceiverUsername());
+            if (receiverIdStr == null) {
                 return ResultUtil.error("接收者用户名不存在");
             }
 
             try {
-                Long accepterId = Long.valueOf(accepterIdStr);
-                notice.setAccepter(accepterId);
+                Long receiverId = Long.valueOf(receiverIdStr);
+                notice.setReceiver_id(receiverId);
             } catch (NumberFormatException e) {
                 return ResultUtil.error("用户ID格式错误");
             }
@@ -100,7 +100,7 @@ public class NoticeServiceImpl implements NoticeService {
                 return ResultUtil.error(403, "权限不足，只有管理员才能发送公告");
             }
             // 公告的接收者为空
-            notice.setAccepter(null);
+            notice.setReceiver_id(null);
         }
 
         try {
@@ -161,7 +161,7 @@ public class NoticeServiceImpl implements NoticeService {
 
             // 检查权限：只能查看自己收到的私信或公告
             if (notice.getNotice_type() == 0) {
-                if (!userId.equals(notice.getAccepter()) && !userId.equals(notice.getSender())) {
+                if (!userId.equals(notice.getReceiver_id()) && !userId.equals(notice.getSender_id())) {
                     return ResultUtil.error("无权查看此通知");
                 }
             }
