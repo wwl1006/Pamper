@@ -27,7 +27,7 @@
               <el-icon><Search /></el-icon>
             </template>
             <template #append>
-              <el-button type="primary" @click="handleSearch">搜索</el-button>
+              <el-button style="width: 100px;" type="primary" @click="handleSearch">搜索</el-button>
             </template>
           </el-input>
         </div>
