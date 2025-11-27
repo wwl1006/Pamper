@@ -1,6 +1,21 @@
 <template>
   <div class="dashboard-layout">
     <UserHeader />
+    <!-- 搜索区域 -->
+    <section class="search-section">
+      <div class="search-container">
+        <el-input v-model="searchKeyword" placeholder="搜索帖子、宠物、用户..." class="search-input" clearable size="large">
+          <template #prefix>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+          <template #append>
+            <el-button type="primary" @click="handleSearch">搜索</el-button>
+          </template>
+        </el-input>
+      </div>
+    </section>
     <main class="dashboard-content">
       <!-- 欢迎区域 -->
       <section class="welcome-section">
@@ -13,25 +28,7 @@
         </div>
       </section>
 
-      <!-- 搜索区域 -->
-      <section class="search-section">
-        <div class="search-container">
-          <el-input
-            v-model="searchKeyword"
-            placeholder="搜索帖子、宠物、用户..."
-            class="search-input"
-            clearable
-            size="large"
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-            <template #append>
-              <el-button type="primary" @click="handleSearch">搜索</el-button>
-            </template>
-          </el-input>
-        </div>
-      </section>
+
 
       <!-- 统计卡片区域 -->
       <section class="stats-cards">
@@ -307,30 +304,32 @@ const renderUserGrowthChart = (data) => {
   const option = {
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(50, 50, 50, 0.9)',
-      borderColor: '#6f4bb0',
-      borderWidth: 1,
-      textStyle: { color: '#fff' }
+      backgroundColor: 'rgba(0,0,0,0.75)',
+      textStyle: { color: '#fff', fontSize: 13 },
+      borderRadius: 8,
+      padding: 10
     },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: data.map(item => item.date),
-      axisLine: { lineStyle: { color: '#ddd' } },
-      axisLabel: { color: '#666' }
+      boundaryGap: false,
+      axisLine: { lineStyle: { color: '#aaa' } },
+      axisLabel: { color: '#555' },
+      splitLine: { show: false }
     },
     yAxis: {
       type: 'value',
-      axisLine: { lineStyle: { color: '#ddd' } },
-      axisLabel: { color: '#666' },
-      splitLine: { lineStyle: { color: '#f0f0f0' } }
+      axisLine: { lineStyle: { color: '#aaa' } },
+      axisLabel: { color: '#555' },
+      splitLine: { lineStyle: { type: 'dashed', color: '#eee' } }
     },
     series: [{
       data: data.map(item => item.count),
       type: 'line',
       smooth: true,
       symbol: 'circle',
-      symbolSize: 8,
+      symbolSize: 10,
       lineStyle: {
         width: 3,
         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
@@ -348,6 +347,10 @@ const renderUserGrowthChart = (data) => {
           { offset: 0, color: 'rgba(111, 75, 176, 0.3)' },
           { offset: 1, color: 'rgba(111, 75, 176, 0.05)' }
         ])
+      },
+      emphasis: {
+        focus: 'series',
+        itemStyle: { color: '#a27bff', borderColor: '#fff', borderWidth: 3 }
       }
     }]
   }
@@ -376,20 +379,27 @@ const renderPostCategoryChart = (data) => {
     },
     series: [{
       type: 'pie',
-      radius: ['40%', '70%'],
-      center: ['35%', '50%'],
+      radius: ['50%', '70%'],
+      center: ['45%', '50%'],
       avoidLabelOverlap: false,
       itemStyle: {
         borderRadius: 10,
         borderColor: '#fff',
-        borderWidth: 2
+        borderWidth: 2,
       },
       label: {
         show: true,
-        formatter: '{b}: {c}'
+        fontSize: 12,
+        color: '#333',
+        formatter: '{b}\n{c} ({d}%)'
       },
       emphasis: {
-        label: { show: true, fontSize: 16, fontWeight: 'bold' }
+        label: {
+          show: true,
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: '#000'
+        }
       },
       data: data,
       color: ['#6f4bb0', '#a27bff', '#4b2e83', '#c9a8ff', '#8b5fcf', '#b794f6']
@@ -420,8 +430,8 @@ const renderAdoptionTypeChart = (data) => {
     },
     series: [{
       type: 'pie',
-      radius: ['40%', '70%'],
-      center: ['35%', '50%'],
+      radius: ['45%', '70%'],
+      center: ['50%', '50%'],
       roseType: 'area',
       itemStyle: {
         borderRadius: 8,
@@ -472,7 +482,7 @@ const renderActivityTypeChart = (data) => {
       type: 'bar',
       barWidth: '50%',
       itemStyle: {
-        borderRadius: [8, 8, 0, 0],
+        borderRadius: [6, 6, 0, 0],
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: '#6f4bb0' },
           { offset: 1, color: '#a27bff' }
@@ -485,6 +495,12 @@ const renderActivityTypeChart = (data) => {
             { offset: 1, color: '#b794f6' }
           ])
         }
+      },
+      label: {
+        show: true,
+        position: 'top',
+        fontSize: 14,
+        color: '#333'
       }
     }]
   }
@@ -521,14 +537,22 @@ const renderInteractionChart = (data) => {
     },
     series: [{
       data: [
-        { value: data.likes, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#ff6b9d' },
-          { offset: 1, color: '#ffa07a' }
-        ])}},
-        { value: data.comments, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#6f4bb0' },
-          { offset: 1, color: '#a27bff' }
-        ])}}
+        {
+          value: data.likes, itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#ff6b9d' },
+              { offset: 1, color: '#ffa07a' }
+            ])
+          }
+        },
+        {
+          value: data.comments, itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#6f4bb0' },
+              { offset: 1, color: '#a27bff' }
+            ])
+          }
+        }
       ],
       type: 'bar',
       barWidth: '40%',
@@ -586,11 +610,14 @@ onBeforeUnmount(() => {
 }
 
 .dashboard-content {
+  max-width: 1800px;
+  width: 95%;
   flex: 1;
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  margin: 0 auto;
 }
 
 .welcome-section {
@@ -623,28 +650,35 @@ onBeforeUnmount(() => {
 }
 
 .search-section {
-  margin-top: -12px;
+
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-right: 25px;
+  /* padding: 2px; */
 }
 
 .search-container {
-  max-width: 800px;
-  margin: 0 auto;
+  /* max-width: 800px; */
+  width: 750px;
+  /* margin: 0 auto; */
 }
 
 .search-input {
-  border-radius: 50px;
+  border-radius: 20px;
 }
 
 .search-input :deep(.el-input__wrapper) {
-  border-radius: 50px 0 0 50px;
+  height: 35px;
+  border-radius: 10px 0 0 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .search-input :deep(.el-input-group__append) {
-  border-radius: 0 50px 50px 0;
+  border-radius: 0 10px 10px 0;
   background: linear-gradient(135deg, #6f4bb0, #4b2e83);
   border: none;
-  padding: 0;
+  padding: 0 20px
 }
 
 .search-input :deep(.el-input-group__append .el-button) {
@@ -678,8 +712,15 @@ onBeforeUnmount(() => {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .stats-cards {

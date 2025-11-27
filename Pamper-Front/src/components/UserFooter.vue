@@ -13,7 +13,7 @@
 <style scoped>
 .footer {
   height: 50px;
-  background-color: #f8f8f8;
+  background-color: #f2f0f0e3;
   color: #555;
   text-align: center;
   line-height: 1.6;
