@@ -17,7 +17,7 @@
             >
               <el-image
                 v-if="petForm.avatar"
-                :src="`http://localhost:8080/${petForm.avatar}`"
+                :src="`${API_BASE}/${petForm.avatar}`"
                 fit="cover"
                 class="avatar-preview"
               />
@@ -117,8 +117,9 @@ const loading = ref(false)
 
 const isEdit = ref(false)
 const petId = ref(null)
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
-const uploadUrl = 'http://localhost:8080/pet/upload/avatar'
+const uploadUrl = `${API_BASE}/pet/upload/avatar`
 const uploadHeaders = {
   Authorization: localStorage.getItem('token')
 }

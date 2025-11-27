@@ -6,7 +6,7 @@
         <div class="pet-header">
           <div class="pet-avatar-large">
             <el-image
-              :src="petDetail.avatar ? `http://localhost:8080/${petDetail.avatar}` : defaultAvatar"
+              :src="petDetail.avatar ? `${API_BASE}/${petDetail.avatar}` : defaultAvatar"
               fit="cover"
               style="width: 100%; height: 100%"
             />
@@ -176,6 +176,7 @@ const isEditRecord = ref(false)
 const recordFormRef = ref(null)
 
 const defaultAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 const petDetail = ref({
   id: null,

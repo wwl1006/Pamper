@@ -10,7 +10,7 @@
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column label="头像" width="80">
           <template #default="scope">
-            <el-avatar :src="scope.row.avatar || '/default-avatar.png'" />
+            <el-avatar :src="getAvatarUrl(scope.row.id)" />
           </template>
         </el-table-column>
         <el-table-column prop="username" label="用户名" width="150" />
@@ -72,11 +72,17 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import request from '../utils/request'
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://47.97.44.200:8080'
+
 const users = ref([])
 const loading = ref(false)
 const page = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
+
+const getAvatarUrl = (userId) => {
+  return `${API_BASE}/profile/avatar/id/${userId}`
+}
 
 const loadUsers = async () => {
   loading.value = true

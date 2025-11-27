@@ -16,7 +16,7 @@
       <div v-for="pet in petList" :key="pet.id" class="pet-card">
         <div class="pet-avatar" @click="goToPetDetail(pet.id)">
           <el-image
-            :src="pet.avatar ? `http://localhost:8080/${pet.avatar}` : defaultAvatar"
+            :src="getAvatarUrl(pet.avatar)"
             fit="cover"
             style="width: 100%; height: 100%"
           />
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -61,6 +61,11 @@ const router = useRouter()
 const loading = ref(false)
 const petList = ref([])
 const defaultAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://47.97.44.200:8080'
+
+const getAvatarUrl = (avatar) => {
+  return avatar ? `${API_BASE}/${avatar}` : defaultAvatar
+}
 
 const loadMyPets = async () => {
   loading.value = true

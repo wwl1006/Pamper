@@ -46,7 +46,7 @@
 
         <div class="publisher-section">
           <div class="publisher-info">
-            <img :src="`http://localhost:8080/profile/avatar/id/${serviceDetail.avatar}`" class="avatar" alt="发布者">
+            <img :src="`${API_BASE}/profile/avatar/id/${serviceDetail.avatar}`" class="avatar" alt="发布者">
             <div>
               <div class="username">{{ serviceDetail.username }}</div>
               <div class="publish-time">发布于 {{ serviceDetail.create_time }}</div>
@@ -66,7 +66,7 @@
         <div v-for="app in applications" :key="app.id" class="application-item">
           <div class="app-header">
             <div class="applicant-info">
-              <img :src="`http://localhost:8080/profile/avatar/id/${app.avatar}`" class="avatar" alt="申请者">
+              <img :src="`${API_BASE}/profile/avatar/id/${app.avatar}`" class="avatar" alt="申请者">
               <div>
                 <div class="username">{{ app.username }}</div>
                 <div class="apply-time">{{ app.create_time }}</div>
@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { View, Document } from '@element-plus/icons-vue'
@@ -179,6 +179,7 @@ import request from '../utils/request'
 
 const router = useRouter()
 const route = useRoute()
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 const loading = ref(false)
 const submitting = ref(false)
 const applyDialogVisible = ref(false)

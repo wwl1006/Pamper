@@ -57,7 +57,7 @@
 
         <div class="service-footer">
           <div class="publisher-info">
-            <img :src="`http://localhost:8080/profile/avatar/id/${service.avatar}`" class="avatar" alt="发布者头像">
+            <img :src="`${API_BASE}/profile/avatar/id/${service.avatar}`" class="avatar" alt="发布者头像">
             <span>{{ service.username }}</span>
           </div>
           <div class="stats">
@@ -90,6 +90,7 @@ import { Plus, PriceTag, Location, Coin, View, Document } from '@element-plus/ic
 import request from '../utils/request'
 
 const router = useRouter()
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 const loading = ref(false)
 const serviceList = ref([])
 const currentPage = ref(1)

@@ -59,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
         } else {
             String now = TimeUtils.getCurrentTimeString();
             user.setCreate_time(now);
-            user.setAvatar(EnvConfig.AvatarUrlPrefix + user.getUsername());
+            user.setAvatar(EnvConfig.AvatarPublicUrlPrefix + user.getUsername());
             // 如果用户名不存在，尝试保存用户信息
             try {
                 int result = accountMapper.saveUser(user);
@@ -89,6 +89,8 @@ public class AccountServiceImpl implements AccountService {
             return ResultUtil.error("用户类型错误");
         } else if (!account.getPassword().equals(user.getPassword())) {
             return ResultUtil.error("密码错误");
+        } else if (account.getStatus() != null && account.getStatus() == 0) {
+            return ResultUtil.error("该账号已被禁用，请联系管理员");
         } else {
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setId(account.getId());
