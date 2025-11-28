@@ -213,7 +213,22 @@ onMounted(() => {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
   margin-bottom: 24px;
+} 
+.filter-bar :deep(.el-radio-button__inner) {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
+
+.filter-bar :deep(.el-radio-button__inner:hover) {
+  color: #ff4d4f;
+}
+.filter-bar :deep(.el-radio-button.is-active .el-radio-button__inner),
+.filter-bar :deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+  color: #fff;
+  box-shadow: -1px 0 0 0 #ff4d4f inset;
+}
+
 
 .post-card {
   cursor: pointer;
@@ -272,6 +287,7 @@ onMounted(() => {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
