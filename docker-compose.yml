@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pamper-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      # 挂载静态资源目录
+      - ./activities:/app/activities
+      - ./adoption:/app/adoption
+      - ./avatars:/app/avatars
+      - ./pets:/app/pets
+      - ./posts:/app/posts
+    networks:
+      - pamper-network
+
+  frontend:
+    build:
+      context: ./Pamper-Front
+      dockerfile: Dockerfile
+    container_name: pamper-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - pamper-network
+
+  db:
+    image: mysql:8.0
+    container_name: pamper-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Zdm@123
+      MYSQL_DATABASE: pamper
+    volumes:
+      - ./source/pamper.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - pamper-network
+
+volumes:
+  mysql_data:
+
+networks:
+  pamper-network:
+    driver: bridge
